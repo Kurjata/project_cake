@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Migrations\AbstractSeed;
-use faker\Factory;
+use Faker\Factory;
 
 /**
  * User seed.
@@ -25,7 +25,17 @@ class UserSeed extends AbstractSeed
 
         $faker = Factory::create();
 
-        $table = $this->table('users');
-        $table->insert($data)->save();
+        for ($i = 0; $i < 20; $i++) {
+            $data['firstName'] = $faker->firstName();
+            $data['lastName'] = $faker->lastName();
+            $data['email'] = $faker->unique()->email;
+            $data['password'] = password_hash('123', PASSWORD_DEFAULT);
+            $table = $this->table('users');
+            $table->insert($data)->save();
+        }
+
+        // A linha abaixo foi removida para evitar duplicação de inserção
+        // $table = $this->table('users');
+        // $table->insert($data)->save();
     }
 }
